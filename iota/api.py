@@ -747,6 +747,33 @@ class Iota(StrictIota):
       inclusionStates = inclusion_states,
     )
 
+  def get_address_transfers(self, inclusion_states=False):
+    # type: (int, Optional[int], bool) -> dict
+    """
+    Returns all transfers associated with an address.
+
+    :param inclusion_states:
+      Whether to also fetch the inclusion states of the transfers.
+
+      This requires an additional API call to the node, so it is
+      disabled by default.
+
+    :return:
+      Dict containing the following values::
+
+         {
+           'bundles': List[Bundle],
+             Matching bundles, sorted by tail transaction timestamp.
+         }
+
+    References:
+      - https://github.com/iotaledger/wiki/blob/master/api-proposal.md#gettransfers
+    """
+    return extended.GetTransfersCommand(self.adapter)(
+      address            = self.address,
+      inclusionStates = inclusion_states,
+    )
+  
   def prepare_transfer(self, transfers, inputs=None, change_address=None):
     # type: (Iterable[ProposedTransaction], Optional[Iterable[Address]], Optional[Address]) -> dict
     """
